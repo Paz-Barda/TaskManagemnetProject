@@ -161,11 +161,11 @@ router.get('/getAlltasksForBoard/:boardId', checkAuth, (req,res,next)=>{
 
 //Adding users to a task
 //First of all chek if the user is part of the DB if no reutrm message
-router.patch('/:taskId/:UserEmail',(req, res, next)=>{
+router.patch('/:taskId/:UserEmail',checkAuth,(req, res, next)=>{
   const task_id= req.params.taskId;
   const user_email = req.params.UserEmail;
 
-  if(User.findOne({email: user_email})){
+  // if(User.findOne({email: user_email})){
     User.find({email: user_email})
     .exec()
     .then(response=>{
@@ -173,50 +173,60 @@ router.patch('/:taskId/:UserEmail',(req, res, next)=>{
       console.log(response.length)
       if(response.length ==0){
         return res.status(202).json({
-          message:'User not exists in the system'
+          message:'User not exist in the system'
         })
       }else{
         //if the user was found
-        //Then check if the user is alredy assgient to the task if yes then we will found the task and we return message that the user alredy assgiend to the task 
+        //Then check if the user is alredy assgiend to the task if yes then we will find the task and return message that the user alredy assgiend to the task 
         //if the task return empty it means that the user is not assgiend to the task and we need to add the user to the task
         Task.findOne({_id:task_id ,assignedTo: response[0]._id})
         .exec()
         .then(task=>{
           const user_id = response[0]._id
-          //if we get NULL in the task it means that the task is not assgined and we need to add the user
+          //if we get NULL in the task (result) it means that the task is not assgined to this user id and we need to add the user
           if(!task){
-            Task.updateOne({_id: task_id}, { $push: {assignedTo: response[0]._id} })
+            Task.updateOne({_id: task_id}, { $push: {assignedTo: response[0]._id}})
             .exec()
             .then(response=>{
               console.log(response);
-
               Task.findOne({_id: task_id})
               .exec()
               .then(task=>{
                 console.log(response);
 
-                //if the task was assgined to the user and the user is not assgined to the board(project) then add the board to the user list.
-                TaskBoard.updateOne({_id: task.boardId},{ $push: {assginedTo: user_id}})
+                //if the task was assgined to the user and the user is not assgined to the board (project) then add the board to the user list.
+                TaskBoard.find({_id: task.boardId},{assginedTo: user_id})
                 .exec()
-                .then(add=>{
-                  console.log(add);
-                  return res.status(200).json({
-                    message:'User was assgiend to task and the board was added to the user'
+                .then(board =>{ if(!board)
+                {
+                  TaskBoard.updateOne({_id: task.boardId},{ $push: {assginedTo: user_id}})
+                  .exec()
+                  .then(added=>{
+                    console.log(added);
+                    return res.status(200).json({
+                      message:'User was assgiend to task and the board was added to the user'
+                    })
                   })
-                })
-                .catch(error=>{
-                  return res.status(500).json({
-                    message:'Wasnt able to add the task to user'
-                  })
-                })
+                  .catch(error=>{
+                    return res.status(500).json({
+                      message:'Wasnt able to add the task to user'
+                      })
+                    })
+                }
+                else
+                {
+                  return res.status(226).json({
+                    message:'User alredy assgiend to the board and now was assigned to the task'
+                    })
+                }
               })
+            })
               .catch(error=>{
                 console.log(error);
                 return res.status(500).json({
                   message:"Error finding task details"
                 })
               })
-
             })
             .catch(error=>{
               console.log(error);
@@ -225,9 +235,8 @@ router.patch('/:taskId/:UserEmail',(req, res, next)=>{
               })
             })
           }else{
-            console.log("Im here")
             return res.status(226).json({
-            message:'User alredy assgient to the task'
+            message:'User alredy assgiend to the task'
             })
           }
         })
@@ -245,10 +254,7 @@ router.patch('/:taskId/:UserEmail',(req, res, next)=>{
         error: err
       })
     })
-  }
 });
-
-
 
 //Each task has a description by passing the task id we are uspdting the body of the task.
 //Update task description.

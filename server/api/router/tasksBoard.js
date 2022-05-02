@@ -1,10 +1,12 @@
 const express = require('express');
 const router = new express.Router();
 const TaskBoard = require('../models/taskskBoard');
+const User = require('../models/user');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const checkAuth = require('../middleware/check-auth');
+
 
 //Create new board (Project that will store all the tasks of the project).
 router.post('/newTaskBoard',checkAuth,(req,res,next)=>{
@@ -128,6 +130,61 @@ router.patch('/:boardId', checkAuth, (req,res,next)=>{
   });
 });
 
+router.patch('/:boardId/:UserEmail', checkAuth, (req,res,next)=>{
+  const board_id = req.params.boardId;
+  const user_email = req.params.UserEmail;  
+  if(User.findOne({email: user_email})){
+    User.find({email: user_email})
+    .exec()
+    .then(response=>{
+      //if the length is 0 then the user is not part of the DB
+      console.log(response.length)
+      if(response.length ==0){
+        return res.status(202).json({
+          message:'User not exists in the system'
+        })
+      }else{
+        //if the user was found
+        //Then check if the user is alredy assgiend to the board if yes then we will found the board and we return message that the user alredy assgiend to the board 
+        //if the board return empty it means that the user is not assgiend to the board and we need to add the user to the board
+        console.log("here!!!!!" ,board_id)
+        TaskBoard.findOne({_id:board_id ,assginedTo: response[0]._id})
+        .exec()
+        .then(board=>{
+          // const user_id = response[0]._id
+          //if we get NULL in the board it means that the board is not assgined and we need to add the user
+          if(!board){
+            TaskBoard.updateOne({_id: board_id},{ $push: {assginedTo: response[0]}})
+            .exec()
+            .then(add=>{
+              console.log(add);
+              return res.status(200).json({
+              message:'User was assgiend to board'
+              })
+        })
+          .catch(error=>{
+            return res.status(500).json({
+            message:'Wasnt able to add the board to user'
+              })
+            })
+          }
+          else{
+            return res.status(226).json({
+            message:'User alredy assgient to the board'
+            })
+          }
+        })
+
+      .catch(error=>{
+        console.log(error);
+        return res.status(500).json({
+          message: error
+        })
+      })
+      }
+    });
+  }
+});
 
 router.get('/', (req,res,next)=>{
   TaskBoard.find({})

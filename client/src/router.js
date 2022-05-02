@@ -10,6 +10,7 @@ import AddTask from './components/tasksComponent/AddTask.vue';
 import SideTaskContainer from './components/tasksComponent/SideTasksMangerComponent/SideTaskContainer.vue';
 import AddUserToTaskScreen from './components/tasksComponent/AddUserToTaskScreen.vue';
 import DatePicker from './components/tasksComponent/DatePicker.vue';
+import AddUserToBoardScreen from './components/profilePageComponents/AddUserToBoardScreen.vue';
 
 
 Vue.use(VueRouter);
@@ -40,10 +41,15 @@ const routes = [
         name:'EditBoardData',
         component:EditBoardData
       },
+      {        
+      path:'/myProfile/Board/:id/AssignUser',
+      name:'AssignUSer',
+      component:AddUserToBoardScreen
+      },
       {
-        path:'/myProfile/Board/:id',
-        name:'TasksList',
-        component:TasksListContainer,
+      path:'/myProfile/Board/:id',
+      name:'TasksList',
+      component:TasksListContainer,
         children:[
           {
             path:'/myProfile/Board/:id/AddTask',

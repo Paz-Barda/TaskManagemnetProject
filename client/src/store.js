@@ -282,7 +282,7 @@ export default new Vuex.Store({
       const email = data.email;
       const task_id = data.taskId;
       console.log(email + ' ' + task_id);
-      axios.patch(`http://localhost:3000/task/${task_id}/${email}`,
+      axios.patch(`http://localhost:3000/task/${task_id}/${email}`,{},
       {
         headers:{
           'user':user
@@ -319,8 +319,28 @@ export default new Vuex.Store({
       })
     },
 
+  addUserToBoard({commit},data){
+    console.log(commit);
+    const user = localStorage.getItem('user');
+    const email = data.email;
+    const board_id = data.boardId;
+    console.log(email + ' ' + board_id);
+    axios.patch(`http://localhost:3000/tasksBoard/${board_id}/${email}`,{},
+  {
+      headers:{
+      'user':user
+    }
+  })
+   .then(res=>{
+      console.log(res.data);
+      alert(res.data.message);
+    })
+    .catch(error=>{
+      console.log(error.message);
+      alert(error.message);
+    })
+  },
 },
-
   getters:{
     getUser(state){
       console.log(state.user);

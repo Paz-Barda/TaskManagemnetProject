@@ -4,7 +4,7 @@
     <v-row class="m_taskRow">
       <v-col class="m_colValue" xs="4" sm="4" md="4" v-on:click="openTask(taskData._id, taskData.boardId)">{{taskData.taskName}}</v-col>
       <v-col class="m_colValue" xs="2" sm="2" md="2">{{taskData.taskStatus}}</v-col>
-      <v-col class="m_colValue m_addUser" xs="3" sm="3" md="3" @click="addUserToTask(taskData._id,taskData.boardId)">{{listofUsers}}</v-col>
+      <v-col class="m_colValue m_addUser" xs="3" sm="3" md="3" @click="addUserToTask(taskData._id,taskData.boardId)">Assign User</v-col>
       <v-col class="m_colValue" xs="2" sm="2" md="2" @click="addDueDateToTask(taskData._id,taskData.boardId)">{{taskData.dueDate}}</v-col>
       <v-col class="m_colValue" xs="1" sm="1" md="1">Edit</v-col>
      

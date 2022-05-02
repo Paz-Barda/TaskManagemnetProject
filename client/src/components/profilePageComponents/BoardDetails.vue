@@ -5,7 +5,7 @@
     <v-row class="m_boardDetil">
       <v-col v-on:click="showTask(boardInfo._id)" xs="5" sm="5" md="5" class="m_boardFiled">{{boardInfo.boardName}}</v-col>
       <v-col xs="4" sm="4" md="4" class="m_boardFiled">{{boardInfo.userName}}</v-col>
-      <v-col xs="2" sm="2" md="2" class="m_boardFiled">Assgin user</v-col>
+      <v-col xs="2" sm="2" md="2" class="m_boardFiled" @click="addUserToBoard(boardInfo._id)">+</v-col>
 
       <v-col xs="1" sm="1" md="1" class="m_boardFiled">
         <!-- When selecting the edit button wr are getting the data about the board togther with a delete option -->
@@ -32,7 +32,9 @@ export default {
     //When ckicking on the project name we are moving to a new routh with data tasks of the selected board
     showTask(boardId){
       this.$router.push(`/myProfile/Board/${boardId}`)
-
+    },
+    addUserToBoard(boardId){
+       this.$router.push(`/myProfile/Board/${boardId}/AssignUser`);
     }
   },
   
