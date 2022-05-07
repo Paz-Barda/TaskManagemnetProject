@@ -11,6 +11,7 @@ import SideTaskContainer from './components/tasksComponent/SideTasksMangerCompon
 import AddUserToTaskScreen from './components/tasksComponent/AddUserToTaskScreen.vue';
 import DatePicker from './components/tasksComponent/DatePicker.vue';
 import AddUserToBoardScreen from './components/profilePageComponents/AddUserToBoardScreen.vue';
+import EditTaskData from './components/tasksComponent/EditTaskData.vue';
 
 
 Vue.use(VueRouter);
@@ -70,6 +71,11 @@ const routes = [
             path:'/myProfile/Board/:id/:taskId/DueDate',
             name:'DueDate',
             component:DatePicker
+          },
+          {
+            path:'/myProfile/Board/:id/:taskId/Edit',
+            name:'EditTask',
+            component:EditTaskData
           }
         ]
       }

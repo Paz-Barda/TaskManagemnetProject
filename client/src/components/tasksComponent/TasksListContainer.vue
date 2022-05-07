@@ -74,8 +74,7 @@ export default {
     '$store.state.tasksList'(value){
       console.log(value);
       this.tasksList = this.$store.getters.gettasksList;
-    }
-
+    },
   }
   
 }

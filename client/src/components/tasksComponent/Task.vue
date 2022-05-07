@@ -4,33 +4,36 @@
     <v-row class="m_taskRow">
       <v-col class="m_colValue" xs="4" sm="4" md="4" v-on:click="openTask(taskData._id, taskData.boardId)">{{taskData.taskName}}</v-col>
       <v-col class="m_colValue" xs="2" sm="2" md="2">{{taskData.taskStatus}}</v-col>
-      <v-col class="m_colValue m_addUser" xs="3" sm="3" md="3" @click="addUserToTask(taskData._id,taskData.boardId)">Assign User</v-col>
-      <v-col class="m_colValue" xs="2" sm="2" md="2" @click="addDueDateToTask(taskData._id,taskData.boardId)">{{taskData.dueDate}}</v-col>
-      <v-col class="m_colValue" xs="1" sm="1" md="1">Edit</v-col>
+      <v-col class="m_colValue m_add1" xs="3" sm="3" md="3" @click="addUserToTask(taskData._id,taskData.boardId)">Assign User</v-col>
+      <v-col class="m_colValue m_add1" xs="2" sm="2" md="2" @click="addDueDateToTask(taskData._id,taskData.boardId)">{{taskData.dueDate}}</v-col>
+      <v-col class="m_colValue m_add" xs="1" sm="1" md="1" @click="editTask(taskData._id,taskData.boardId)">Edit</v-col>
      
     </v-row>
   </div>
 </template>
 
 <script>
-// import { format, parseISO } from 'date-fns';
+
 export default {
   props:['taskData'],
 data(){
   return{
-        listofUsers: [null]
+        listofUsers: [null],
   }
 },
   methods: {
     openTask(taskId, boardId){
       this.$router.push(`/myProfile/Board/${boardId}/${taskId}`)
     },
-        addUserToTask(taskId, boardId){
+    addUserToTask(taskId, boardId){
       this.$router.push(`/myProfile/Board/${boardId}/${taskId}/AssignUser`);
     },
-        addDueDateToTask(taskId, boardId){
+    addDueDateToTask(taskId, boardId){
       this.$router.push(`/myProfile/Board/${boardId}/${taskId}/DueDate`);
-    }
+    },
+    editTask(taskId, boardId){
+      this.$router.push(`/myProfile/Board/${boardId}/${taskId}/Edit`);
+      }
   },
   }
 </script>
@@ -62,12 +65,19 @@ data(){
   font-weight: 400;
   border-right: 1px solid;
   border-right-color: #fff;
+  
 }
 
 
-.m_addUser:hover{
+.m_add:hover{
   color:green;
   font-weight: bold;
+}
+
+.m_add1:hover{
+  color:green;
+  font-weight: bold;
+  cursor: cell;
 }
 </style>
 

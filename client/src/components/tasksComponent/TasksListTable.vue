@@ -14,25 +14,30 @@
   </div>
 </template>
 
-
 <script>
 import Row from './Task.vue';
 export default {
   props:['tasksList'],
   components:{
     appRow:Row
-  }
-  
+  },
+  watch:{
+      '$store.state.tasksList'(value){
+        console.log(value);
+        this.tasksList = this.$store.getters.gettasksList
+    }
+  },
 }
 </script>
-
 
 <style scoped>
 .m_TasksTable{
   margin:0px 20px;
   text-align: left;
   width: 90%;
-
+  height: 80%;
+  overflow-y: auto;
+   overflow-x:hidden;
 }
 
 .m_headerLabel{

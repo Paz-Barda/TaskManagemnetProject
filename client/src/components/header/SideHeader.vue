@@ -7,10 +7,12 @@
       <div class="m_browsingLogo" v-on:click="showBrowser = !showBrowser">
         <img class="m_browsImage" alt="" :src="require('../../assets/images/sideheader/browsing.png')">
       </div>
-
+    <div class="m_browsingLogOut m_browsingLogOut" v-on:click="logOut">
+      LOG OUT
+      </div>
     <div class="m_userIcon">
-      <div class="m_letter">
-        {{this.user.name.charAt(0).toUpperCase()}}
+      <div class="m_letter" v-if="user != null">
+          {{this.user.name.charAt(0).toUpperCase()}}
       </div>
     </div>
 
@@ -36,7 +38,11 @@ export default {
   methods: {
     setUser(){
       this.user = this.$store.getters.getUser
-      console.log(this.$store.getters.getUser);
+    },
+    logOut()
+    {
+      this.$store.dispatch('logOut');
+      this.$router.push('/');
     }
   },
   watch:{
@@ -172,6 +178,31 @@ export default {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   cursor: pointer;
 }
+
+.m_browsingLogOut
+{
+  font-size: 15px;
+  font-weight: 900;
+  color: aliceblue;
+  text-align: center;
+  position: absolute;
+  bottom: 80px;
+  padding: 5px;
+  width: 50px;
+  height: 50px;
+  margin: 20px 5px;
+  border: 2px solid white;
+  border-radius: 50px;
+  background: transparent;
+  font-family: sofia-pro,Roboto,Helvetica,Arial,sans-serif
+}
+.m_browsingLogOut:hover{
+  border: 2px solid rgb(255, 0, 0);
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  cursor: pointer;
+}
+
 
 .m_browsImage{
   margin: 8px;

@@ -43,9 +43,14 @@ export default {
       //login function calling the log-in endpoint.
       axios.post('http://localhost:3000/users/logIn', {"email": this.email, "password": this.password})
       .then(res=>{
+        console.log("this is result now:", res)
+        if(res.status == 202){
+          alert("wrong password")
+        }
+        else{
         console.log(res.data);
         this.$store.dispatch('loginUser', res.data);
-
+        }
       })
       .catch(err=>{
         console.log(err);

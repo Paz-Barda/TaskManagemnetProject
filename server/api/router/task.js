@@ -11,6 +11,7 @@ const task = require('../models/task');
 const TaskBoard = require('../models/taskskBoard');
 const { find } = require('../models/task');
 const moment = require('moment');
+const fns = require('date-fns');
 
 
 
@@ -30,7 +31,7 @@ router.post('/newTask', checkAuth, (req,res,next)=>{
     userName: req.body.userName,
     boardId: req.body.boardId,
     taskStatus: 'New',
-    dueDate: moment(new Date().toISOString())
+    dueDate: new Date()
     // userId: req.body.userId
   })
 
@@ -74,37 +75,6 @@ router.get('/', (req,res,next)=>{
   })
 });
 
-//Delete task from the DB by passing the task id.
-router.delete('/:taskId', checkAuth, (req,res,next)=>{
-  const id= req.params.taskId
-
-
-  //Check if the task is still exist in the DB if no then return message if yes then remove the task from the DB. 
-  if(!Task.find({_id: id})){
-    return res.status(500).json({
-      message:"Task was alredy delted"
-    })
-  }else{
-    Task.deleteOne({_id: id}).exec()
-    .then((result)=>{
-      console.log(result);
-      res.status(200).json({
-        message:'Task was removed'
-      })
-    })
-    .catch((err)=>{
-      console.log(err);
-      res.status(500).json({
-        message:'Error while trying to delete the task'
-      })
-    })
-  }
-
-
-});
-
-
-
 //Get data about the task by passing the the task id, Check if the task exist in the DB if no eturn message.
 //Else return info about the task 
 router.get('/:taskId', checkAuth, (req,res,next)=>{
@@ -133,9 +103,11 @@ router.get('/:taskId', checkAuth, (req,res,next)=>{
 //Get all tasks the linked to a specific board (project), By passing the board-id.
 router.get('/getAlltasksForBoard/:boardId', checkAuth, (req,res,next)=>{
   const boardId = req.params.boardId;
+  console.log("this is the board id:" ,req.params.boardId)
   Task.find({boardId: boardId})
   .exec()
   .then((tasks)=>{
+    console.log("this is the tasks" ,tasks.length)
     //If the user have boards projects then return the assgined board if no the return 0 and on the client side we will show a message.
     if(tasks.length > 0){
       return res.status(200).json({
@@ -275,24 +247,24 @@ router.patch('/:taskId',checkAuth,(req,res,next)=>{
   })
 });
 
-//Each task has a dueDate by passing the task id we are updating the body of the task.
-//Update task dueDate.
-router.patch('/:taskId',checkAuth,(req,res,next)=>{
-  const taskId = req.params.taskId;
+// //Each task has a dueDate by passing the task id we are updating the body of the task.
+// //Update task dueDate.
+// router.patch('/:taskId',checkAuth,(req,res,next)=>{
+//   const taskId = req.params.taskId;
 
-  Task.updateOne({_id: taskId}, {$set: {dueDate: req.body.dueDate}})
-  .exec()
-  .then((result)=>{
-    return res.status(200).json({
-      message: result
-    })
-  })
-  .catch((err)=>{
-    return res.status(500).json({
-      error: err
-    })
-  })
-});
+//   Task.updateOne({_id: taskId}, {$set: {dueDate: req.body.dueDate}})
+//   .exec()
+//   .then((result)=>{
+//     return res.status(200).json({
+//       message: result
+//     })
+//   })
+//   .catch((err)=>{
+//     return res.status(500).json({
+//       error: err
+//     })
+//   })
+// });
 
 
 //Adding comments to the task, in Each task the members of the task can live a comment.
@@ -349,5 +321,35 @@ router.patch('/dueDate/:taskId/:dueDate',checkAuth,(req, res, next)=>{
     })
   }
 });
+
+//Delete the task from the DB by passing the task id. 
+router.delete('/:boardId/:taskId', checkAuth,(req,res,next)=>{
+  const task_id = req.params.taskId
+  const board_id = req.params.boardId
+  TaskBoard.updateOne({_id: board_id}, { $pull: {tasks: task_id} })
+  .exec()
+  .then(result =>{
+    console.log(result)
+    Task.deleteOne({_id: task_id}).exec()
+    .then((result)=>{
+    return res.status(200).json({
+      message:'Task was deleted.'
+    })
+  })
+    .catch((error)=>{
+      console.log(error);
+      return res.status(500).json({
+      message:'Wasnt able to delete the Task'
+    })
+  })
+  .catch((error)=>{
+    console.log(error);
+    return res.status(500).json({
+    message:'Wasnt able to delete the Task'
+  })
+})
+});
+})
+
 
 module.exports = router;

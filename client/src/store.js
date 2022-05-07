@@ -25,6 +25,7 @@ export default new Vuex.Store({
     LOGOUT_USER(){
       // state.user=null;
       console.log('Clear storage');
+      this.state.user = null;
       window.localStorage.clear();
     },
 
@@ -237,14 +238,14 @@ export default new Vuex.Store({
     },
 
 
-    //Getting all the tasks of  single board by calling /task/getAlltasksForBoard/${boardId} endpoint and then store then in the tasksList state using the SET_TASK_LIST mutations.
+    //Getting all the tasks of  single board by calling /task/getAlltasksForBoard/${boardId} endpoint and then store them in the tasksList state using the SET_TASK_LIST mutations.
     //The data value stores the board id. 
     getAllTasksForBoard({commit},data){
       console.log(commit);
+      console.log("in getAllTasksForBoard:" ,data);
       const user = localStorage.getItem('user');
-      const boardId = data;
-      
-      axios.get(`http://localhost:3000/task/getAlltasksForBoard/${boardId}`,{
+      // const boardId = data;
+      axios.get(`http://localhost:3000/task/getAlltasksForBoard/${data}`,{
         headers:{
           'user': user
         }
@@ -263,13 +264,14 @@ export default new Vuex.Store({
       console.log(commit);
       const user = localStorage.getItem('user');
       const taskId = data
-
+      console.log(data)
       axios.get(`http://localhost:3000/task/${taskId}`,{
         headers:{
         'user': user
       }})
       .then(res=>{
         commit('SET_TASK_DATA', res.data)
+        console.log("after recived task:",data)
       })
       .catch(err=>{
         console.log(err);
@@ -318,6 +320,26 @@ export default new Vuex.Store({
         console.log(error);
       })
     },
+        //Delete task from the data  
+        deleteTask({commit}, data){          
+          console.log(commit);
+          //Get the user data from the local storage and pass in the header as part of the checkAuth process. 
+          const user = localStorage.getItem('user')
+          axios.delete(`http://localhost:3000/task/${data.board_id}/${data.task_id}`,
+          {
+            headers:{
+            'user': user
+            }
+          })
+          .then(res=>{
+            console.log("result:",res);
+            //Call getAllTasksForBoard action in order to update the list of the updated tasks in the state.
+            this.dispatch('getAllTasksForBoard',data.board_id);
+          })
+          .catch(err=>{
+            console.log(err);
+          })
+        },
 
   addUserToBoard({commit},data){
     console.log(commit);
@@ -340,6 +362,9 @@ export default new Vuex.Store({
       alert(error.message);
     })
   },
+  logOut({commit}){
+    commit('LOGOUT_USER');
+  }
 },
   getters:{
     getUser(state){

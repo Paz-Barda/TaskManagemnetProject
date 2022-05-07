@@ -6,7 +6,7 @@
     </div>
 
     <div class="m_userName">
-      Hi {{user.name}}
+      Hi {{this.userDetails ? this.userDetails.name : ' '}}
     </div>
 
     <div class="m_BrowsOptions">
@@ -35,8 +35,6 @@ export default {
   },
 }
 </script>
-
-
 
 <style scoped>
 .m_sideContainer{

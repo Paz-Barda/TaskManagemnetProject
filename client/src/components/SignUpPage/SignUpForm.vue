@@ -1,13 +1,13 @@
 <template>
   <div>
     <div class="m_label">{{this.fields[index]}}</div>
-    <input v-bind:class="{notDispaly: this.index === 0? false: true}" class="m_inputBox" v-model="name" :placeholder="this.placeHolderFldes[0]">
+    <input v-bind:class="{notDispaly: this.index === 0? false: true}" class="m_inputBox" v-model="name" :placeholder="this.placeHolderFields[0]">
 
-    <input v-bind:class="{notDispaly: this.index === 1? false: true}" class="m_inputBox" v-model="email" :placeholder="this.placeHolderFldes[1]">
+    <input v-bind:class="{notDispaly: this.index === 1? false: true}" class="m_inputBox" v-model="email" :placeholder="this.placeHolderFields[1]">
 
-    <input v-bind:class="{notDispaly: this.index === 2? false: true}" class="m_inputBox" v-model="password" :placeholder="this.placeHolderFldes[2]" type="password">
+    <input v-bind:class="{notDispaly: this.index === 2? false: true}" class="m_inputBox" v-model="password" :placeholder="this.placeHolderFields[2]" type="password">
 
-    <input v-bind:class="{notDispaly: this.index === 3? false: true}" class="m_inputBox" v-model="validatePassword" :placeholder="this.placeHolderFldes[3]" type="password">
+    <input v-bind:class="{notDispaly: this.index === 3? false: true}" class="m_inputBox" v-model="validatePassword" :placeholder="this.placeHolderFields[3]" type="password">
 
     <div v-bind:class="{ active: isActive, alert }">{{alert[index]}}</div>
     <div class="m_signUpButton" v-on:click="nextFiled">{{buttonLabels[buttonLabelindex]}}</div>

@@ -7,7 +7,7 @@
       <v-col class="m_signUpForm" cols="12" sm="7" md="7">
         <div class="m_signUpTitle">Welcome to Pasana.com</div>
         <div class="m_feedLine">Let’s get started with a few simple steps</div>
-        <appSignUpForm class="m_signForm" />
+        <appSignUpForm class="m_signForm"></appSignUpForm>
       </v-col>
 
       <v-col class="m_signUpImage" cols="12" xs="5" sm="3" md="3">

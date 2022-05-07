@@ -18,6 +18,7 @@
 
 <script>
 export default {
+  // props:['addTask'],
   data() {
     return {
       task_name: null
@@ -25,8 +26,12 @@ export default {
   },
   methods: {
     addNewTask(){
-      // console.log(this.$route.params.id);
+      // this.addTask = false;
       this.$store.dispatch('addNewTask', {"boardId":this.$route.params.id, "taskName": this.task_name, })
+      // this.$router.push(`/myProfile/Board/${this.$route.params.id}`);
+      this.$router.go(-1);
+      
+      
     }
   },
 }

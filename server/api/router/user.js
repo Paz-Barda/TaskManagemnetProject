@@ -86,16 +86,18 @@ router.post('/logIn', (req,res,next)=>{
     //Check if the user is part of the DB. if no then return message.
     if(user.length < 1){
       return res.status(404).json({
-        message:"User is not exissting in the system please sign-up"
+        message:"User is not existing in the system please sign-up"
       })
     }
     else
     {
       //If the user is part of the DB then bcrypt the password.
       bcrypt.compare(req.body.password, user[0].password, (err,result)=>{
-        if(err){
-          return res.status(500).json({
-            message: err
+        console.log(user);
+        console.log(req.body.password);
+        if(result == false){
+          console.log("this is the result", res)
+          return res.status(202).json({
           })
         }
         else
@@ -150,5 +152,8 @@ router.post('/checkLogedUser',checkAuth, (req,res,next)=>{
     })
   console.log('Trying to auth');
 } );
+
+
+
 
 module.exports = router;

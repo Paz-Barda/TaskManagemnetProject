@@ -40,7 +40,6 @@ export default {
         alert('Please choose a valid date')
       }else{
         this.$store.dispatch('addDueDateToTask',{ date: this.dueDate, taskId: this.$route.params.taskId});
-        console.log(this.$store.getters.getUser);
       }
     },
     close(){

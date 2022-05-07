@@ -3,14 +3,19 @@
     <div class="m_addTaskButton" v-on:click="addNewTask">
       {{buttonText}}
     </div>
-
+<!-- <appButtonText :text="addTask"/> -->
   <router-view></router-view>
 </div>
 </template>
 
 <script>
+// import AddTask from "./AddTask";
 export default {
   props:['board_id'],
+  //   components:{
+  //   appButtonText:AddTask,
+
+  // },
   data() {
     return {
       addTask:true,
@@ -20,19 +25,25 @@ export default {
   },
   methods: {
     addNewTask(){
-      if(this.addTask){
+      if(this.buttonText == 'Add New Task'){
         this.buttonText = "Close"
         this.addTask = false;
         const board_id= window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
-        this.$router.push(`/myProfile/Board/${board_id}/AddTask`)
+        this.$router.push(`/myProfile/Board/${board_id}/AddTask`);
       }else{
         this.buttonText="Add New Task";
         this.addTask = true;
-        this.$router.push(`/myProfile/Board/${this.board_id}`)
+        // this.$router.push(`/myProfile/Board/${this.board_id}`)
+        this.$router.go(-1);
       }
       
     }
   },
+  watch:{
+     '$store.state.tasksList'(){
+       this.buttonText="Add New Task";
+     }
+  }
   
 }
 </script>
