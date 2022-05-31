@@ -25,9 +25,6 @@ Easily track, monitor and manage, your team members tasks on one platform. Lest 
 <li>Axios</li>
 </ul>
 
-Project-video:
-https://youtu.be/yIPQ6mllQi0
-
 <b>welcome Screen:</b>
 <a href="https://imgur.com/fVuRm35"><img src="https://i.imgur.com/fVuRm35.png" title="source: imgur.com" /></a>
 
